@@ -11,7 +11,8 @@ loader().then((monaco)=>{
     })
 
     ipcRenderer.on('open-file',(sender, url = '')=>{
-        url=url.slice(8);
+        const sliceLength = process.platform === 'win32' ? 8:7
+        url=url.slice(sliceLength);
         console.log(url);
 
         const filedata = fs.readFileSync(url, 'utf-8')
