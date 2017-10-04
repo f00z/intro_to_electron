@@ -1,4 +1,4 @@
-const {app, BrowserWindow}= require('electron')
+const {app, BrowserWindow, Menu}= require('electron')
 let mainWindow
 
 app.on("ready",()=>{
@@ -12,4 +12,18 @@ app.on("ready",()=>{
         mainWindow.webContents.send('open-file', url)
     })
 
+    const menuTemplate = [{
+        label:'File',
+        submenu:[
+           {
+            label: 'Save File',
+            click(){
+                mainWindow.webContents.send('save-file')
+            }
+           }
+        ]
+    }]
+    
+    const menu = Menu.buildFromTemplate(menuTemplate);
+    Menu.setApplicationMenu(menu)
 })
