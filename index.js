@@ -1,4 +1,5 @@
-const {app, BrowserWindow, Menu}= require('electron')
+const {app, BrowserWindow, Menu, dialog}= require('electron')
+
 let mainWindow
 
 app.on("ready",()=>{
@@ -12,7 +13,19 @@ app.on("ready",()=>{
         mainWindow.webContents.send('open-file', url)
     })
 
-    const menuTemplate = [{
+    const menuTemplate = [
+       {
+         label: "Editor",
+         submenu:[
+             {
+                 role: 'toggledevtools'   
+             },
+             {
+                 role: 'quit'
+             }
+         ]
+       },
+       {
         label:'File',
         submenu:[
            {
@@ -22,8 +35,26 @@ app.on("ready",()=>{
             }
            }
         ]
-    }]
-    
+       },
+       {
+           role: 'editMenu' 
+       },
+       {
+           role: 'windowMenu'
+       },
+       {
+           label: 'Open File',
+           click(){
+               dialog.showOpenDialog(mainWindow, (urls)=>{
+                   if (!urls || urls.length ===0){
+                       return
+                   }
+                   mainWindow.webContents.send('open-file', url[0])
+               })
+           }
+       }
+    ]
+
     const menu = Menu.buildFromTemplate(menuTemplate);
     Menu.setApplicationMenu(menu)
 })
